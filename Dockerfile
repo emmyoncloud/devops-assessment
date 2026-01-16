@@ -2,12 +2,16 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Copy package.json and package-lock.json from app/
+COPY app/package*.json ./
+
 # Install dependencies
-COPY package*.json ./
 RUN npm ci
 
-# Copy app source code
-COPY . .
+# Copy rest of the app
+COPY app/ .
+
+# Remove dev dependencies for production
 RUN npm prune --production
 
 # Runtime stage
@@ -22,4 +26,4 @@ COPY --from=builder /app /app
 USER appuser
 
 EXPOSE 3000
-CMD ["node", "app/src/app.js"]
+CMD ["node", "src/app.js"]
