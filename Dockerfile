@@ -1,29 +1,35 @@
-# Build stage
+Build dependencies
 FROM node:20-alpine AS builder
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json from app/
-COPY app/package*.json ./
+# Copy only package files first to leverage Docker layer caching
+COPY app/package.json app/package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (only production for final image)
+RUN npm ci --omit=dev
 
-# Copy rest of the app
+# Copy the rest of the source code
 COPY app/ .
 
-# Remove dev dependencies for production
-RUN npm prune --production
+# Runtime image
+FROM node:20-alpine AS runtime
 
-# Runtime stage
-FROM node:20-alpine
+# Set working directory
 WORKDIR /app
 
-# Create non-root user
+# Create a non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Copy built app
+# Copy built app and production dependencies from the builder stage
 COPY --from=builder /app /app
+
+# Switch to non-root user
 USER appuser
 
+# Expose app port
 EXPOSE 3000
+
+# Start the application
 CMD ["node", "src/app.js"]
