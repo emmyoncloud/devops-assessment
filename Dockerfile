@@ -1,4 +1,4 @@
-Build dependencies
+# Build dependencies
 FROM node:20-alpine AS builder
 
 # Set working directory
