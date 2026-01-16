@@ -1,1 +1,24 @@
+{
+  "name": "devops-app",
+  "version": "1.0.0",
+  "description": "Production-ready Node.js application for technical DevOps assessment",
+  "main": "src/app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "echo \"No tests defined yet\" && exit 0"
+  },
+  "author": "Emmanuel Akor",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
 
