@@ -1,4 +1,11 @@
 node_modules
+app/node_modules
+
 npm-debug.log
-Dockerfile*
+yarn-debug.log
+yarn-error.log
+
 .git
+.gitignore
+
+Dockerfile*
