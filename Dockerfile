@@ -4,22 +4,20 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm install --production
+RUN npm ci
 
 # Copy app source code
 COPY . .
-
-# Remove dev dependencies if any (optional here, since we used --production)
 RUN npm prune --production
 
 # Runtime stage
 FROM node:20-alpine
 WORKDIR /app
 
-# Create a user for security
+# Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Copy built app from the builder stage
+# Copy built app
 COPY --from=builder /app /app
 USER appuser
 
